@@ -4,6 +4,7 @@ class CreatePeople < ActiveRecord::Migration
 			t.integer		:uid,				:null => false
 			t.string		:name, 			:null =>false
 			t.string		:picture, 	:null =>false
+			t.string		:locale, 	:null =>false
 			t.boolean		:sended,		:default => false
 
       t.timestamps

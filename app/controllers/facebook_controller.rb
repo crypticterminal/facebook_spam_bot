@@ -3,15 +3,29 @@ require 'json'
 
 class FacebookController < ApplicationController
   def search_people
-		#uid = 100002734181687
+	
 		puts "start"
-		uid = People.last.uid
+		if People.last.nil?
+			uid = 100002734181687
+		else
+			uid = People.last.uid
+		end
 		count = 0
 		people = Array.new
 		while true
 			uid = uid - 1
 			puts uid
-			response = Net::HTTP.get_response("graph.facebook.com","/#{uid}?fields=picture,name")
+			begin
+				response = Net::HTTP.get_response("graph.facebook.com","/#{uid}?fields=picture,name,locale")
+			rescue
+				puts "wait..."
+				t1 = Time.now
+				t2 = Time.now
+				while(t2 - t1 < 60*10)
+					t2 = Time.now
+				end
+				next
+			end
 			person = JSON.parse(response.body)
 			puts "#{person.inspect}"
 			if !person["name"].nil?
